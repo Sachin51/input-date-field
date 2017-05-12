@@ -1,6 +1,7 @@
 {
   "name": "input-date-field",
   "description": "yet another date field",
+  "verison": "1.0.0",
   "main": "dist/inputDateField.js",
   "authors": [
     "Nithin Biliya"
@@ -28,7 +29,8 @@
   "overrides": {
     "bootstrap": {
       "main": [
-        "dist/css/bootstrap.min.css"
+        "dist/css/bootstrap.min.css",
+        "dist/fonts/*"
       ]
     }
   }

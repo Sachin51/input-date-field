@@ -3,9 +3,15 @@
 
 module.exports = function() {
   var appSrc='./src/';
+  var distDir='./dist/';
 
   var config={
     temp: './.tmp/',
+
+//    distFiles: [appSrc+'js/inputDateField.js',appSrc+'html/inputDateField.tmpl.html'],
+    distJsFiles: appSrc+'js/inputDateField.js',
+    distHtmlFiles: appSrc+'html/inputDateField.tmpl.html',
+    distCssFiles: '',
 
     // all js to vet
     alljs: ['./*.js','./src/js/*.js'],
@@ -16,6 +22,8 @@ module.exports = function() {
     css: [appSrc+'*.css',appSrc+'css/*.css'],
 //    less: ['./src/*.less','./src/modules/less/*.less'],
 
+
+    bowerJSON: './bower.json',
     bower: {
       json: require('./bower.json'),
       directory: './src/lib/',
@@ -33,20 +41,32 @@ module.exports = function() {
     },
 
     source: appSrc,
-    build: './dist/',
+    build: './gh-pages/',
+    dist: distDir,
     resources: './src/resources/*',
     images: './src/resources/images/*',
     json: './src/resources/json/*.json',
 
-//    htmltemplates: [appSrc+'**/**/*.html',appSrc+'**/*.html'],
-//    templateCache: {
-//      file: 'templates.js',
-//      options: {
-//        module: 'app.core',
-//        standAlone: true,
-//        root: 'app/'
-//      }
-//    }
+    htmltemplates: [appSrc+'**/**/*.html',appSrc+'**/*.html'],
+    templateCache: {
+      file: 'templates.js',
+      options: {
+        module: 'input.date.field',
+        standAlone: true,
+        root: '/'
+      }
+    },
+
+    htmltemplatesDist: [distDir+'**/**/*.html',distDir+'**/*.html'],
+    templateCacheDist: {
+      file: 'templates.js',
+      options: {
+        module: 'input.date.field',
+        standAlone: true,
+        root: '/'
+      }
+    }
+
 
   };
 

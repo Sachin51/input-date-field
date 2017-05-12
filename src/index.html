@@ -2,13 +2,13 @@
 <html>
 
   <head>
-    <!-- build:css styles/lib.css -->
+    <!-- build:css css/lib.css -->
     <!-- bower:css -->
     <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css" />
     <!-- endbower -->
     <!-- endbuild -->
 
-    <!-- build:css styles/app.css -->
+    <!-- build:css css/app.css -->
     <!-- inject:css -->
     <!-- endinject -->
     <!-- endbuild -->
@@ -18,8 +18,10 @@
 
   <body ng-app="myApp">
     <div ng-controller="myBasicController as vm">
-      <input-date-field ng-model="dt"></input-date-field>
-      dt - {{dt}}
+
+      <input-date-field ng-model="vm.dt"></input-date-field>
+      dt - {{vm.dt}}
+
     </div>
 
     <!-- build:js js/lib.js -->
@@ -35,6 +37,8 @@
     <!-- inject:js -->
     <script src="js/inputDateField.js"></script>
     <script src="js/script.js"></script>
+    <!-- endinject -->
+    <!-- inject:templates:js -->
     <!-- endinject -->
     <!-- endbuild -->
   </body>

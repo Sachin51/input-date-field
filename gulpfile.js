@@ -37,6 +37,8 @@ gulp.task('linthtml', function () {
     customattrs: config.htmlAngularValidate.customattrs,
     customtags: config.htmlAngularValidate.customtags,
     emitError: true,
+    reportpath: null,
+    reportCheckstylePath: null,
     reportFn:function(fileFailures){
         for (var i = 0; i < fileFailures.length; i++) {
             var fileResult = fileFailures[i];
@@ -103,6 +105,26 @@ gulp.task('jsoncopy', function() {
     .pipe(gulp.dest(config.build+'resources/json'));
 });
 
+gulp.task('htmlcopy', ['fontscopy'], function() {
+  log('copying html files for making it ready for templatecache');
+  return gulp
+    .src(config.htmltemplates)
+    .pipe($.flatten())
+    .pipe(gulp.dest(config.temp+'html/'));
+});
+
+gulp.task('fontscopy', ['clean'], function() {
+  log('copying bootstrap and other fonts');
+  var filterFonts = $.filter('**/*.{eot,svg,ttf,woff,woff2}', { restore: true });
+
+  return gulp
+    .src(config.bowerJSON)
+    .pipe($.mainBowerFiles())
+    .pipe(filterFonts)
+    .pipe($.flatten())
+    .pipe(gulp.dest(config.build+'fonts/'));
+});
+
 gulp.task('images', function() {
   log('copying and compressing images');
   return gulp
@@ -112,38 +134,38 @@ gulp.task('images', function() {
 });
 
 gulp.task('clean', function(done){
-  var delconfig=[].concat(config.build,config.temp);
+  var delconfig=[].concat(config.build,config.temp,config.dist);
   log('cleaning '+$.util.colors.blue(delconfig));
   return del(delconfig,done);
 });
 
-//gulp.task('templatecache',['clean'],function(){
-//  log('creating AngularJS $templateCache');
-//  return gulp
-//    .src(config.htmltemplates)
-//    .pipe($.if(args.verbose,$.print()))
-//    .pipe($.minifyHtml({empty:true}))
-//    .pipe($.angularTemplatecache(
-//      config.templateCache.file,
-//      config.templateCache.options
-//      ))
-//    .pipe(gulp.dest(config.temp));
-//});
+gulp.task('templatecache',['htmlcopy'],function(){
+  log('creating AngularJS $templateCache');
+  return gulp
+    .src(config.htmltemplates)
+    .pipe($.if(args.verbose,$.print()))
+    .pipe($.minifyHtml({empty:true}))
+    .pipe($.angularTemplatecache(
+      config.templateCache.file,
+      config.templateCache.options
+      ))
+    .pipe(gulp.dest(config.temp));
+});
 
-gulp.task('optimize',['wireindex','jsoncopy'],function() {
+gulp.task('optimize',['wireindex','templatecache'],function() {
   log('optimizing the js/html/css files');
   var assets = $.useref({searchPath: './src/'});
-//  var templateCache = config.temp+config.templateCache.file;
+  var templateCache = config.temp+config.templateCache.file;
   var cssFilter = $.filter('**/*.css',{restore:true});
   var jsLibFilter = $.filter('**/'+config.optimized.lib,{restore:true});
   var jsAppFilter = $.filter('**/'+config.optimized.app,{restore:true});
   return gulp
     .src(config.index)
     //.pipe($.plumber())
-//    .pipe($.inject(gulp.src(templateCache,{read:false}), {
-//      starttag: '<!-- inject:templates:js -->',
-//      relative: true
-//      }))
+    .pipe($.inject(gulp.src(templateCache,{read:false}), {
+      starttag: '<!-- inject:templates:js -->',
+      relative: true
+      }))
     .pipe(assets)
     .pipe(cssFilter)
     .pipe($.csso())
@@ -162,6 +184,76 @@ gulp.task('optimize',['wireindex','jsoncopy'],function() {
     .pipe(gulp.dest(config.build))
     .pipe($.rev.manifest())
     .pipe(gulp.dest(config.build));
+});
+
+gulp.task('testTask', function() {
+  return gulp
+    .src(config.bowerJSON)
+    .pipe($.if(args.verbose,$.print()))
+    .pipe($.mainBowerFiles())
+    .pipe(gulp.dest(config.temp));
+});
+
+gulp.task('copyDistJS', ['clean'], function() {
+  var copyconfig=[].concat(config.distJsFiles);
+  log('copying distribution JS files');
+  return gulp
+    .src(copyconfig)
+    .pipe(gulp.dest(config.dist+'js/'));
+});
+
+gulp.task('copyDistHTML', ['copyDistJS'], function() {
+  var copyconfig=[].concat(config.distHtmlFiles);
+  log('copying distribution HTML files');
+  return gulp
+    .src(copyconfig)
+    .pipe(gulp.dest(config.dist+'html/'));
+});
+
+gulp.task('copyDistCSS', ['copyDistHTML'], function() {
+  var copyconfig=[].concat(config.distCssFiles);
+  log('copying distribution CSS files');
+  return gulp
+    .src(copyconfig)
+    .pipe(gulp.dest(config.dist+'css/'));
+});
+
+gulp.task('templatecachedist',['copyDistCSS'],function(){
+  log('creating AngularJS $templateCache for dist');
+  return gulp
+    .src(config.htmltemplatesDist)
+    .pipe($.if(args.verbose,$.print()))
+    .pipe($.minifyHtml({empty:true}))
+    .pipe($.angularTemplatecache(
+      config.templateCacheDist.file,
+      config.templateCacheDist.options
+      ))
+    .pipe(gulp.dest(config.dist+'js/'));
+});
+
+gulp.task('distribute', ['templatecachedist'], function() {
+  log('optimizing the dist files');
+  var cssFilter = $.filter('**/*.css',{restore:true});
+  var jsFilter = $.filter('**/*.js',{restore:true});
+  var htmlFilter = $.filter('**/*.html',{restore:true});
+
+  return gulp
+    .src(config.dist+'**/*')
+    .pipe(cssFilter)
+    .pipe($.if(args.verbose,$.print()))
+    .pipe($.csso())
+    .pipe($.rename({suffix: '.min'}))
+    .pipe(cssFilter.restore)
+    .pipe(jsFilter)
+    .pipe($.if(args.verbose,$.print()))
+    .pipe($.uglify())
+    .pipe($.rename({suffix: '.min'}))
+    .pipe(jsFilter.restore)
+    .pipe(htmlFilter)
+    .pipe($.if(args.verbose,$.print()))
+    .pipe($.minifyHtml({empty:true}))
+    .pipe(htmlFilter.restore)
+    .pipe(gulp.dest(config.dist));
 });
 
 gulp.task('serve-dev',['wireindex'],function() {
