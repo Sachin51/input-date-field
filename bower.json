@@ -1,7 +1,7 @@
 {
   "name": "input-date-field",
   "description": "yet another date field",
-  "verison": "1.0.1",
+  "verison": "1.0.2",
   "main": "dist/inputDateField.js",
   "authors": [
     "Nithin Biliya"
