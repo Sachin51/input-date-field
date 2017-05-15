@@ -1,14 +1,4 @@
-/* eslint angular/document-service: "off" */
-
 (function () {
-
-  // making the template html relative to this js file
-  var scripts = document.getElementsByTagName("script");
-  var currentScriptPath = scripts[scripts.length - 1].src;
-  var templateURLArray = currentScriptPath.split('/');
-  templateURLArray.length = templateURLArray.length - 2;
-  templateURLArray.splice(0, 3);
-  var templateURL = templateURLArray.join('/') + '/html/inputDateField.tmpl.html';
 
   angular.module('input.date.field', ['ui.bootstrap', 'ngAnimate'])
 
@@ -19,7 +9,7 @@
           model: '=ngModel'
         },
         require: "?ngModel",
-        templateUrl: templateURL,
+        templateUrl: 'html/inputDateField.tmpl.html',
         link: function (scope) {
           $log.info("model inside lnk - " + scope.model);
 

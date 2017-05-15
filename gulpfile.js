@@ -139,7 +139,7 @@ gulp.task('clean', function(done){
   return del(delconfig,done);
 });
 
-gulp.task('templatecache',['htmlcopy'],function(){
+gulp.task('templatecache',['fontscopy'],function(){
   log('creating AngularJS $templateCache');
   return gulp
     .src(config.htmltemplates)

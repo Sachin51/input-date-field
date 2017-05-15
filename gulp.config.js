@@ -47,13 +47,13 @@ module.exports = function() {
     images: './src/resources/images/*',
     json: './src/resources/json/*.json',
 
-    htmltemplates: [appSrc+'**/**/*.html',appSrc+'**/*.html'],
+    htmltemplates: [appSrc+'**/**/*.html',appSrc+'**/*.html','!'+appSrc+'index.html'],
     templateCache: {
       file: 'templates.js',
       options: {
         module: 'input.date.field',
-        standAlone: true,
-        root: '/'
+        standAlone: true//,
+        //root: '/'
       }
     },
 
@@ -62,8 +62,8 @@ module.exports = function() {
       file: 'templates.js',
       options: {
         module: 'input.date.field',
-        standAlone: true,
-        root: '/'
+        standAlone: true//,
+        //root: '/'
       }
     }
 
