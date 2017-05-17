@@ -13,14 +13,18 @@ Installation
 ```
  bower install angular-date-field
 ```
+Link the main files mentioned in its bower.json into your index.html and inject the input.date.field module into your module.
 
-Install the dependencies with -
+
+Testing after cloning the project
+------------
+* Install the dependencies with -
 ```
  bower install
  npm install
 ```
 
-Build using grunt -
+* Build using grunt -
 ```
  gulp serve-dev
  gulp serve-prod
