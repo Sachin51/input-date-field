@@ -20,6 +20,11 @@
     <div ng-controller="myBasicController as vm">
 
       <input-date-field ng-model="vm.dt"></input-date-field>
+
+      <input-date-field ng-model="vm.dt" ng-disabled="true"></input-date-field>
+
+      <input-date-field ng-model="vm.dt" datepicker-options="vm.options"></input-date-field>
+
       dt - {{vm.dt}}
 
     </div>

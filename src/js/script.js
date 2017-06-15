@@ -6,4 +6,9 @@ angular.module('myApp', ['input.date.field'])
 
       vm.dt=1270837800000;
 
+      vm.options = {
+        minDate: new Date(),
+        maxDate: new Date("2017-06-17")
+      };
+
   }])
