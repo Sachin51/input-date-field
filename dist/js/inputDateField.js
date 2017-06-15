@@ -8,6 +8,7 @@
         scope: {
           model: '=ngModel',
           disabled: '=ngDisabled',
+          required: '=ngRequired',
           dateOptions: '=?datepickerOptions'
         },
         require: "?ngModel",
