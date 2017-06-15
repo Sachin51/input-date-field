@@ -6,7 +6,9 @@
       return {
         restrict: 'E',
         scope: {
-          model: '=ngModel'
+          model: '=ngModel',
+          disabled: '=ngDisabled',
+          dateOptions: '=?datepickerOptions'
         },
         require: "?ngModel",
         templateUrl: 'html/inputDateField.tmpl.html',
