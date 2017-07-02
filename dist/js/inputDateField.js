@@ -9,6 +9,7 @@
           model: '=ngModel',
           disabled: '=ngDisabled',
           required: '=ngRequired',
+          change: '=ngChange',
           dateOptions: '=?datepickerOptions'
         },
         require: "?ngModel",
