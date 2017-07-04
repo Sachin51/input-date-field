@@ -2,7 +2,7 @@
 
   angular.module('input.date.field', ['ui.bootstrap', 'ngAnimate'])
 
-    .directive('inputDateField', ["$log", function ($log) {
+    .directive('inputDateField', [function () {
       return {
         restrict: 'E',
         scope: {
@@ -14,16 +14,23 @@
         },
         require: "?ngModel",
         templateUrl: 'html/inputDateField.tmpl.html',
-        link: function (scope) {
-          $log.info("model inside lnk - " + scope.model);
-
+        link: function (scope, ele, attr, ctrl) {
           //      scope.validate = function() {
           //        if(angular.isUndefined(scope.model))
           //          bootbox.alert("Date should be in DD/MM/YYYY format");
           //      }
 
-          scope.updateModelToMilliSec = function () {
+          scope.valueChanged = function () {
+            // update the model to the milliseconds value
             scope.model = scope.model.getTime();
+
+            // set the form validity
+            if((scope.model>scope.dateOptions.maxDate) || (scope.model<scope.dateOptions.minDate)) {
+              ctrl.$setValidity('outOfBoundDate', false);
+            }
+            else {
+              ctrl.$setValidity('outOfBoundDate', true);
+            }
           }
 
         }
