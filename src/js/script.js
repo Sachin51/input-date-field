@@ -1,7 +1,7 @@
 // Code goes here
 
 angular.module('myApp', ['input.date.field'])
-  .controller('myBasicController', [function() {
+  .controller('myBasicController', ['$log',function($log) {
       var vm = this;
 
       vm.dt=1499106600000;
@@ -10,5 +10,9 @@ angular.module('myApp', ['input.date.field'])
         minDate: new Date(),
         maxDate: new Date("2017-07-17")
       };
+
+      vm.logChangedTime = function() {
+        $log.info("dt2 changed at - "+(new Date()));
+      }
 
   }])
