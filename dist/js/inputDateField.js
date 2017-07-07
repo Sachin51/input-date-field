@@ -10,6 +10,7 @@
           disabled: '=ngDisabled',
           required: '=ngRequired',
           change: '=ngChange',
+          onChangeCallback: '&',
           dateOptions: '=?datepickerOptions'
         },
         require: "?ngModel",
@@ -21,15 +22,21 @@
           //      }
 
           scope.valueChanged = function () {
-            // update the model to the milliseconds value
-            scope.model = scope.model.getTime();
 
-            // set the form validity
-            if((scope.model>scope.dateOptions.maxDate) || (scope.model<scope.dateOptions.minDate)) {
-              ctrl.$setValidity('outOfBoundDate', false);
-            }
-            else {
-              ctrl.$setValidity('outOfBoundDate', true);
+            if(!(angular.isUndefined(scope.model) || scope.model==null)) {
+              // update the model to the milliseconds value
+              scope.model = scope.model.getTime();
+
+              // call the on change callback function
+              scope.onChangeCallback();
+
+              // set the form validity
+              if((scope.model>scope.dateOptions.maxDate) || (scope.model<scope.dateOptions.minDate)) {
+                ctrl.$setValidity('outOfBoundDate', false);
+              }
+              else {
+                ctrl.$setValidity('outOfBoundDate', true);
+              }
             }
           }
 
