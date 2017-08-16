@@ -10,6 +10,7 @@
           disabled: '=ngDisabled',
           required: '=ngRequired',
           change: '=ngChange',
+          clazz: '=ngClass',
           onChangeCallback: '&',
           dateOptions: '=?datepickerOptions'
         },
